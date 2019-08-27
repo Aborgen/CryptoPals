@@ -10,6 +10,10 @@ def getArgs():
   args = parser.parse_args()
   return args
 
+# It is assumed that any callers will pass in __file__ (file.py).
+def getFilename(filename):
+  return os.path.splitext(filename)[0]
+
 def jsonParse():
   data = {}
   with open('data.json') as jsonData:

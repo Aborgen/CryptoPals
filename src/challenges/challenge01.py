@@ -1,11 +1,11 @@
-from initChallenge import checkResult, getArgs, jsonParse
+from initChallenge import checkResult, getArgs, getFilename, jsonParse
 from modules.utils.convert import hex2b64
 # Convert hex to base64
 
 def convert_hex_to_base64():
   # Set up
   args = getArgs()
-  challengeData = jsonParse()['challenge01']
+  challengeData = jsonParse()[getFilename(__file__)]
   value = ''
   # If user is supplying value to be converted
   if args.input:
