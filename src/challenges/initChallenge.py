@@ -6,7 +6,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 def getArgs():
   parser = argparse.ArgumentParser('Each challenege is set up to run on it\'s own, using value(s) located in data.json. This can be changed by using the --input flag')
-  parser.add_argument('-i', '--input', help = 'The text to be processed', type = str)
+  parser.add_argument('-i', '--input', nargs = '*', help = 'The text to be processed. Accepts 0 to many inputs.', type = str)
   args = parser.parse_args()
   return args
 
