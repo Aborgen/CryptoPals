@@ -6,20 +6,17 @@ def convert_hex_to_base64():
   # Set up
   args = getArgs()
   challengeData = jsonParse()[getFilename(__file__)]
-  value = ''
-  # If user is supplying value to be converted
   if args.input:
-    value = args.input
-  else:
-    value = challengeData['value']
+    challengeData['values'] = args.input
 
+  # Complete challenge
+  value = challengeData['values'][0]
   output = hex2b64(value)
   challengeData['output'] = output.decode()
-  challengeData['value'] = value
   return challengeData
 
 if __name__ == '__main__':
   data = convert_hex_to_base64()
   print(data['description'] + "\n----------")
-  print(f"Input:\t{data['value']}")
+  print(f"Input:\t{data['values'][0]}")
   checkResult(data['output'], data['expectedOutput'])
