@@ -1,8 +1,8 @@
 import argparse
-import json
 import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from modules.utils.file import readJSON
 
 def getArgs():
   parser = argparse.ArgumentParser('Each challenege is set up to run on it\'s own, using value(s) located in data.json. This can be changed by using the --input flag')
@@ -15,11 +15,8 @@ def getFilename(filename):
   return os.path.splitext(filename)[0]
 
 def jsonParse():
-  data = {}
-  with open('data.json') as jsonData:
-    data = json.load(jsonData)
-
-  return data
+  filename = 'data.json'
+  return readJSON(filename)
 
 def checkResult(actualOutput, expectedOutput):
   if (actualOutput != expectedOutput):
