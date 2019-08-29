@@ -23,6 +23,9 @@ def bytes2hex(b):
 def validateHex(hexString):
   isHex = True
   eInfo = ''
+  if type(hexString) != str:
+    isHex = False
+    eInfo = "(value must be of type str)"
   try:
     int(hexString, 16)
   except ValueError as err:
