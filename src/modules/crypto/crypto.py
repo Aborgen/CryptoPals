@@ -11,4 +11,4 @@ def fixedXOR(a, b):
     encrypted.append(aByte ^ bByte)
   
   return bytes(encrypted)
-    
+
