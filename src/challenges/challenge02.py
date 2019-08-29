@@ -1,11 +1,11 @@
-from initChallenge import checkResult, getArgs, getFilename, jsonParse
+from initChallenge import checkResult, getArgs, getData, getFilename
 from modules.crypto.crypto import fixedXOR
 from modules.utils.convert import bytes2hex
 
 def fixed_XOR():
   # Set up
   args = getArgs()
-  challengeData = jsonParse()[getFilename(__file__)]
+  challengeData = getData()[getFilename(__file__)]
   if args.input:
     challengeData['values'] = args.input
 

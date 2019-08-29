@@ -14,8 +14,8 @@ def getArgs():
 def getFilename(filename):
   return os.path.splitext(filename)[0]
 
-def jsonParse():
-  filename = 'data.json'
+def getData():
+  filename = './resources/data.json'
   return readJSON(filename)
 
 def checkResult(actualOutput, expectedOutput):
