@@ -11,6 +11,7 @@ class XORType(Enum):
 class Candidate(NamedTuple):
   score:  int
   key:    str
+  base:   str
   secret: str
 
 def crackXOR(hexString, scoreFile, EType):
@@ -23,8 +24,8 @@ def crackXOR(hexString, scoreFile, EType):
     raise NotImplementedError
 
 def crackSingleXOR(hexString, scoreFile):
-  bestCandidate = Candidate(0, '', '')
   frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
+  bestCandidate = Candidate(0, '', '', '')
   # We skip 0, since XORing against a bunch of 0s isn't going to do anything
   for i in range(1, 256):
     # The string interpolation will convert i into hex, and pad it with 0 if need be.
@@ -32,6 +33,14 @@ def crackSingleXOR(hexString, scoreFile):
     secret = fixedXOR(hexString, possibleKey)
     score = calculateScore(secret, frequentLetters)
     if score > bestCandidate.score:
+      encodedByUTF8 = True
+      try:
+        secret.decode()
+      except:
+        encodedByUTF8 = False
+
+      if encodedByUTF8:
+        bestCandidate = Candidate(score, possibleKey, hexString, secret)
 
   return bestCandidate
 
