@@ -20,5 +20,12 @@
       "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
     ],
     "expectedOutput": "Cooking MC's like a pound of bacon"
+  },
+  "challenge04": {
+    "description": "Find the one 60-character string among many that has been encrypted by single-character XOR",
+    "values": [
+      "resources/hexStrings.txt"
+    ],
+    "expectedOutput": "Hammer time, probably"
   }
 }
