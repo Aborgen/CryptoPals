@@ -26,15 +26,16 @@ def validateHex(hexString):
   if type(hexString) != str:
     isHex = False
     eInfo = "(value must be of type str)"
-  try:
-    int(hexString, 16)
-  except ValueError as err:
-    isHex = False
-    eInfo = "(value can not be parsed as hex)"
+  else:
+    try:
+      int(hexString, 16)
+    except ValueError as err:
+      isHex = False
+      eInfo = "(value can not be parsed as hex)"
 
-  if len(hexString) % 2 != 0:
-    isHex = False
-    eInfo = "(numbers must be in pairs)"
+    if len(hexString) % 2 != 0:
+      isHex = False
+      eInfo = "(numbers must be in pairs)"
  
   return (isHex, eInfo) 
 
