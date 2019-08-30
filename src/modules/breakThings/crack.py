@@ -1,7 +1,7 @@
 from . import initBreak
 from enum import Enum
 from modules.crypto.crypto import fixedXOR
-from modules.utils.file import readFile
+from modules.utils.file import readJSON
 from typing import NamedTuple
 
 class XORType(Enum):
@@ -23,8 +23,8 @@ def crackXOR(hexString, scoreFile, EType):
     raise NotImplementedError
 
 def crackSingleXOR(hexString, scoreFile):
-  frequentLetters = [x.encode() for x in readFile(scoreFile)[0].split(', ')]
   bestCandidate = Candidate(0, '', '')
+  frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
   # We skip 0, since XORing against a bunch of 0s isn't going to do anything
   for i in range(1, 256):
     # The string interpolation will convert i into hex, and pad it with 0 if need be.
@@ -32,13 +32,12 @@ def crackSingleXOR(hexString, scoreFile):
     secret = fixedXOR(hexString, possibleKey)
     score = calculateScore(secret, frequentLetters)
     if score > bestCandidate.score:
-      bestCandidate = Candidate(score, possibleKey, secret)
 
   return bestCandidate
 
 def calculateScore(secret, keyList):
   score = 0
-  for key in keyList:
-    score += secret.count(key)
+  for key, value in keyList.items():
+    score += (secret.count(key) * value)
   
-  return score
+  return round(score, 4)

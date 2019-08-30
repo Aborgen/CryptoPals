@@ -1,2 +1,0 @@
-# Based on https://en.wikipedia.org/wiki/Letter_frequency
-e, t, a, o, i, n, s, h, r, d, l, u 
