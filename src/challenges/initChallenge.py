@@ -21,8 +21,10 @@ def getData():
 def checkResult(actualOutput, expectedOutput):
   if (actualOutput != expectedOutput):
     challengeMismatch(actualOutput, expectedOutput)
-  else:
-    print(f"Output:\t{actualOutput}") 
+    return False
+
+  print(f"Output:\t{actualOutput}") 
+  return True
 
 def challengeMismatch(actualOutput, expectedOutput):
   print("~~~~! Mismatch !~~~~~")
