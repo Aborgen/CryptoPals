@@ -3,7 +3,10 @@ import json
 def readJSON(filename):
   data = {}
   with open(filename) as jsonData:
-    data = json.load(jsonData)
+    data = json.load(jsonData, parse_float=float)
+  
+  if '//' in data:
+    del data['//']
 
   return data
 
@@ -15,7 +18,7 @@ def readFile(filename):
       if line.startswith('#'):
         continue
 
-    lines.append(line)
+      lines.append(line)
 
   # Remove unnecessary whitespace
   return [line.rstrip() for line in lines]
