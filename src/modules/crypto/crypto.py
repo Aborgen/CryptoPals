@@ -15,3 +15,5 @@ def fixedXOR(a, b):
   
   return bytes(encrypted)
 
+def repeatingXOR(line, key):
+  return fixedXOR(line, key * len(line))

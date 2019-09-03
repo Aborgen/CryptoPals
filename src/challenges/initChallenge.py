@@ -9,6 +9,7 @@ def getArgs():
   parser.add_argument('-i', '--input', nargs = '*', help = 'The text to be processed. Accepts 0 to many inputs.', type = str)
   parser.add_argument('-d', '--dictionaryFile', help = 'For challenges that need the contects of some file to complete', type = str)
   parser.add_argument('-c', '--candidates', help = 'For challenges that need to guess, output information for n of the best guesses', type = int, default = 1)
+  parser.add_argument('-k', '--key', help = 'Some challenges utilize a key to encrypt', type = str)
   args = parser.parse_args()
   return args
 
