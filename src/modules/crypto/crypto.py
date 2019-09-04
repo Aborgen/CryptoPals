@@ -1,6 +1,7 @@
 from . import initCrypto
 from ..utils.collections import normalizeListSize
-from ..utils.convert import hex2bytes, isBytes, isHex
+from ..utils.compare import isBytes, isHex
+from ..utils.convert import hex2bytes
 
 def fixedXOR(a, b):
   if not isBytes(a):
