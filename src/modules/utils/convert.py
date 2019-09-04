@@ -5,6 +5,10 @@ def hex2b64(hexString):
   b = hex2bytes(hexString)
   return base64.b64encode(b)
 
+def b642hex(b64String):
+  b = base64.b64decode(b64String, validate = True)
+  return bytes2hex(b)
+
 def hex2bytes(hexString):
   isHex, eInfo = _validateHex(hexString)
   if not isHex:
