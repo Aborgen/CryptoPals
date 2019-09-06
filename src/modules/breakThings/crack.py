@@ -1,6 +1,7 @@
 from . import initBreak
 from enum import Enum
 from modules.crypto.crypto import fixedXOR
+from modules.utils.convert import hex2bytes
 from modules.utils.file import readJSON
 from typing import NamedTuple
 
@@ -14,23 +15,30 @@ class Candidate(NamedTuple):
   base:   str
   secret: str
 
-def crackXOR(hexString, scoreFile, EType):
+def crackXOR(byteObject, scoreFile, EType):
+  if not isBytes(byteObject):
+    byteObject = hex2bytes(byteObject) if isHex(byteObject) else byteObject.encode()
+
   if EType == XORType.SINGLE:
-    return crackSingleXOR(hexString, scoreFile)
+    return _crackSingleXOR(byteObject, scoreFile)
   elif EType == XORType.REPEATING:
     raise NotImplementedError
     #return crackRepeatingXOR(hexString)
   else:
     raise NotImplementedError
 
-def crackSingleXOR(hexString, scoreFile):
+def _crackSingleXOR(byteObject, scoreFile):
+  if not isBytes(byteObject):
+    raise ValueError("Input must be a bytes object")
+
   frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
   bestCandidate = Candidate(0, '', '', '')
   # We skip 0, since XORing against a bunch of 0s isn't going to do anything
+  byteLength = len(byteObject)
   for i in range(1, 256):
     # The string interpolation will convert i into hex, and pad it with 0 if need be.
-    possibleKey = f'{i:02x}' * (len(hexString) // 2)
-    secret = fixedXOR(hexString, possibleKey)
+    possibleKey = f'{i:02x}' * byteLength
+    secret = fixedXOR(byteObject, possibleKey)
     score = calculateScore(secret, frequentLetters)
     if score > bestCandidate.score:
       encodedByUTF8 = True
@@ -40,7 +48,7 @@ def crackSingleXOR(hexString, scoreFile):
         encodedByUTF8 = False
 
       if encodedByUTF8:
-        bestCandidate = Candidate(score, possibleKey, hexString, secret)
+        bestCandidate = Candidate(score, possibleKey, byteObject, secret)
 
   return bestCandidate
 
