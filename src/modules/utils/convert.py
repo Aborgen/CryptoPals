@@ -1,5 +1,5 @@
 import base64
-from .compare import _validateBytes, _validateHex
+from .compare import _validateBytes, _validateHex, isHex
 
 def hex2b64(hexString):
   b = hex2bytes(hexString)
@@ -25,3 +25,9 @@ def bytes2hex(b):
   hexString = bytes.hex(b)
   return hexString
 
+# Convert a string to bytes. One way, or another...
+def toBytes(string):
+  if type(string) != str:
+    raise ValueError
+
+  return hex2bytes(string) if isHex(string) else string.encode()
