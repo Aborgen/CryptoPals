@@ -1,14 +1,14 @@
 from . import initCrypto
 from ..utils.collections import normalizeListSize
-from ..utils.compare import isBytes, isHex
-from ..utils.convert import hex2bytes
+from ..utils.compare import isBytes
+from ..utils.convert import toBytes
 
 def fixedXOR(a, b):
   if not isBytes(a):
-    a = hex2bytes(a) if isHex(a) else a.encode()
+    a = toBytes(a)
 
   if not isBytes(b):
-    b = hex2bytes(b) if isHex(b) else b.encode()
+    b = toBytes(b)
 
   encrypted = bytearray()
   for aByte, bByte in zip(a, b):
