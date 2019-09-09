@@ -36,5 +36,10 @@
   "challenge06": {
     "description": "Break repeating-character XOR",
     "value": "resources/challenge06.txt"
+  },
+  "challenge07": {
+    "description": "Demonstrate ability to decrypt AES-128 in ECB mode given key",
+    "key": "YELLOW SUBMARINE",
+    "value": "resources/challenge07.txt"
   }
 }
