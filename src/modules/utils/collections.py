@@ -8,3 +8,11 @@ def normalizeListSize(aList, bList):
     del aList[bLength - 1:]
   else:
     del bList[aLength - 1:]
+
+# One liner from Denis Otkidach (https://stackoverflow.com/a/1541827)
+# If there are any duplicates, the length of the set will be less than the length of the list.
+def anyDuplication(valueList):
+  return len(valueList) != len(set(valueList))
+
+def countDuplication(valueList):
+  return len(valueList) - len(set(valueList))
