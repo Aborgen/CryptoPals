@@ -41,5 +41,9 @@
     "description": "Demonstrate ability to decrypt AES-128 in ECB mode given key",
     "key": "YELLOW SUBMARINE",
     "value": "resources/challenge07.txt"
+  },
+  "challenge08": {
+    "description": "Detect the single block that is AES-128 mode ECB encrypted within many",
+    "value": "resources/challenge08.txt"
   }
 }
