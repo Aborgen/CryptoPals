@@ -4,6 +4,7 @@ from . import initCrypto
 from ..utils.collections import normalizeListSize
 from ..utils.compare import isBytes
 from ..utils.convert import toBytes
+from ..utils.modify import pad
 
 class Action(Enum):
   ENCRYPT = 0
@@ -43,15 +44,3 @@ def ECB_AES128(key, text, action):
   else:
     raise ValueError
 
-# This is an implementation of PKCS#7 padding
-def pad(text, multiple):
-  if not isBytes(text):
-    text = toBytes(text)
-
-  if len(text) % multiple == 0:
-    return text
-
-  missing = multiple - (len(text) % multiple)
-  correctedLength = len(text) + missing
-  text = text.ljust(correctedLength, bytes([missing]))
-  return text
