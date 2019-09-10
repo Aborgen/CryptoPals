@@ -1,6 +1,6 @@
 from typing import NamedTuple
 from . import initBreak
-from ..utils.collections import countDuplication
+from ..utils.collections import countDuplication, splitToBlocks
 from ..utils.compare import isBytes
 from ..utils.convert import toBytes
 
@@ -12,8 +12,7 @@ def maybeECB_AES128(ciphertext):
   if not isBytes(ciphertext):
     ciphertext = toBytes(ciphertext)
 
-  ECB = 16
-  blocks = [ciphertext[i:i + ECB] for i in range(0, len(ciphertext), ECB)]
+  blocks = splitToBlocks(ciphertext, 16)
   repetition = countDuplication(blocks)
   if repetition == 0:
     return False
