@@ -8,7 +8,7 @@ def pad_with_PKCS7():
     challengeData['value'] = args.input[0]
 
   # Complete challenge
-  output = pad(challengeData['value'], challengeData['length'])
+  output = pad(challengeData['value'].encode(), challengeData['length'])
   challengeData['output'] = output
   return challengeData
 
