@@ -45,5 +45,11 @@
   "challenge08": {
     "description": "Detect the single block that is AES-128 mode ECB encrypted within many",
     "value": "resources/challenge08.txt"
+  },
+  "challenge09": {
+    "description": "Implement PKCS#7 padding",
+    "value": "YELLOW SUBMARINE",
+    "length": 20,
+    "expectedOutput": "YELLOW SUBMARINE\u0004\u0004\u0004\u0004"
   }
 }
