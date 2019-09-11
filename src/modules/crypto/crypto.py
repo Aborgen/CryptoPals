@@ -4,7 +4,7 @@ from . import initCrypto
 from ..utils.collections import normalizeListSize
 from ..utils.compare import isBytes
 from ..utils.convert import toBytes
-from ..utils.modify import pad
+from ..utils.modify import pad, repeatPerCharacter
 
 class Action(Enum):
   ENCRYPT = 0
@@ -17,11 +17,8 @@ def fixedXOR(a, b):
   if not isBytes(b):
     b = toBytes(b)
 
-  encrypted = bytearray()
-  for aByte, bByte in zip(a, b):
-    encrypted.append(aByte ^ bByte)
-  
-  return bytes(encrypted)
+  encrypted = bytes(aByte ^ bByte for aByte, bByte in zip(a, b))
+  return encrypted
 
 def repeatingXOR(line, key):
   return fixedXOR(line, key * len(line))
