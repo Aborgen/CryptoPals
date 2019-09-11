@@ -22,7 +22,7 @@ def countDuplication(valueList):
 def splitToBlocks(text, length):
   # Ensure text can be broken up into equal length blocks
   if len(text) % length != 0:
-    text = pad(text) 
+    text = pad(text, length)
 
   return [text[i:i + length] for i in range(0, len(text), length)]
 
