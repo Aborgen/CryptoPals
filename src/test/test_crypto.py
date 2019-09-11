@@ -35,17 +35,7 @@ class encrypt_with_XOR(ut.TestCase):
     a = 'It is time to do the test. The test that beats out all other tests'
     key = 'ACE'
     assert(len(a) % len(key) == 0)
-    expected = b'\xe5\x9e\xee\xc5\x99\xee' \
-               b'\xd8\x83\xa3\xc9\xca\xba' \
-               b'\xc3\xca\xaa\xc3\xca\xba' \
-               b'\xc4\x8f\xee\xd8\x8f\xbd' \
-               b'\xd8\xc4\xee\xf8\x82\xab' \
-               b'\x8c\x9e\xab\xdf\x9e\xee' \
-               b'\xd8\x82\xaf\xd8\xca\xac' \
-               b'\xc9\x8b\xba\xdf\xca\xa1' \
-               b'\xd9\x9e\xee\xcd\x86\xa2' \
-               b'\x8c\x85\xba\xc4\x8f\xbc' \
-               b'\x8c\x9e\xab\xdf\x9e\xbd'
+    expected = bytes.fromhex("083765283065352a282463312e63212e6331292665352636356d65152b20613720323765352b2435632724223132632a343765202f29612c31292637613720323736")
 
     result = repeatingXOR(a, key)
     self.assertEqual(result, expected)
@@ -53,19 +43,9 @@ class encrypt_with_XOR(ut.TestCase):
   def test_4_repeating_XOR_with_key_that_is_not_multiple(self):
     # Length of 66
     a = 'It is time to do the test. The test that beats out all other tests'
-    key = 'BEEF'
+    key = 'TRUE'
     assert(len(a) % len(key) != 0)
-    expected = b'\xf7\x9b\x9e\x86\xcd\xcf' \
-               b'\xca\x86\xd3\x8a\x9e\x9b' \
-               b'\xd1\xcf\xda\x80\x9e\x9b' \
-               b'\xd6\x8a\x9e\x9b\xdb\x9c' \
-               b'\xca\xc1\x9e\xbb\xd6\x8a' \
-               b'\x9e\x9b\xdb\x9c\xca\xcf' \
-               b'\xca\x87\xdf\x9b\x9e\x8d' \
-               b'\xdb\x8e\xca\x9c\x9e\x80' \
-               b'\xcb\x9b\x9e\x8e\xd2\x83' \
-               b'\x9e\x80\xca\x87\xdb\x9d' \
-               b'\x9e\x9b\xdb\x9c\xca\x9c'
-   
+    expected = bytes.fromhex('1d26752c2772212c393775313b72312a74263d2074263036207c75113c37753131212165203a3431743030242021752a21267524383e752a203a3037742630362021')
+
     result = repeatingXOR(a, key)
     self.assertEqual(result, expected)
