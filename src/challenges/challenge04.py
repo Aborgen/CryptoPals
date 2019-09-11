@@ -14,7 +14,7 @@ def identify_single_XOR():
 
   # Complete challenge
   hexStrings = readFile(challengeData['values'][0])
-  scoreBoard = [Candidate(0, '', '', '')] * (args.candidates if args.candidates else 1)
+  scoreBoard = [Candidate(0, b'', b'', b'')] * (args.candidates if args.candidates else 1)
   for hexString in hexStrings:
     candidate = crackXOR(hexString, args.dictionaryFile, XORType.SINGLE)
     for idx, finalist in enumerate(scoreBoard):
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     for idx, finalist in enumerate(scoreBoard, start=1):
       print(f"{idx})")
       print(f"Score:\t{finalist.score}")
-      print(f"Key:\t{finalist.key}")
-      print(f"Base:\t{finalist.base}")
+      print(f"Key:\t{finalist.key.hex()}")
+      print(f"Base:\t{finalist.base.hex()}")
       print(f"Secret:\t{finalist.secret.decode().rstrip()}")
       print("----------")

@@ -16,9 +16,9 @@ class XORType(Enum):
 
 class Candidate(NamedTuple):
   score:  int
-  key:    str
-  base:   str
-  secret: str
+  key:    bytes
+  base:   bytes
+  secret: bytes
 
 def crackXOR(byteObject, scoreFile, EType):
   if not isBytes(byteObject):
@@ -36,12 +36,11 @@ def _crackSingleXOR(byteObject, scoreFile):
     raise ValueError("Input must be a bytes object")
 
   frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
-  bestCandidate = Candidate(0, '', '', '')
+  bestCandidate = Candidate(0, b'', b'', b'')
   # We skip 0, since XORing against a bunch of 0s isn't going to do anything
   byteLength = len(byteObject)
   for i in range(1, 256):
-    # The string interpolation will convert i into hex, and pad it with 0 if need be.
-    possibleKey = f'{i:02x}' * byteLength
+    possibleKey = repeatPerCharacter(bytes([i]), byteLength)
     secret = fixedXOR(byteObject, possibleKey)
     score = calculateScore(secret, frequentLetters)
     if score > bestCandidate.score:
@@ -95,8 +94,7 @@ def _crackRepeatingXOR(byteObject, scoreFile, keySizeRange, blockNumber):
   key = bytearray()
   for block in blocks:
     candidate = _crackSingleXOR(block, scoreFile)
-    keyByte = bytes.fromhex(candidate.key[0:2])
-    key.append(keyByte[0])
+    key.append(candidate.key[0])
 
   key = bytes(key)
   secret = fixedXOR(byteObject, repeatPerCharacter(key, len(byteObject)))

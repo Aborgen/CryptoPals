@@ -23,6 +23,6 @@ if __name__ == '__main__':
   print(f"Input:\t{data['values'][0]}")
   goodResult = checkResult(candidate.secret.decode(), data['expectedOutput'])
   if goodResult:
-    print(f"Key:\t{candidate.key}")
+    print(f"Key:\t{candidate.key.hex()}")
     print(f"Score:\t{candidate.score}")
     

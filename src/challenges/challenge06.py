@@ -1,6 +1,5 @@
-from initChallenge import checkResult, getArgs, getFilename, getData
+from initChallenge import getArgs, getFilename, getData
 from modules.breakThings.crack import crackXOR, XORType
-from modules.crypto.crypto import repeatingXOR
 from modules.utils.convert import b642hex
 from modules.utils.file import readFile
 
@@ -17,18 +16,15 @@ def repeating_XOR():
   # Complete challenge
   f = readFile(challengeData['value'])
   hexString = b642hex(''.join(f))
-  key = crackXOR(hexString, args.dictionaryFile, XORType.REPEATING).hex()
-  secret = repeatingXOR(hexString, key)
+  candidate = crackXOR(hexString, args.dictionaryFile, XORType.REPEATING)
 
-  challengeData['key'] = key
-  challengeData['secret'] = secret
+  challengeData['candidate'] = candidate
   challengeData['lines'] = len(f)
   return challengeData
 
 if __name__ == '__main__':
   data = repeating_XOR()
-  key = bytes.fromhex(data['key']).decode()
   print(data['description'] + "\n----------")
   print(f"Decoding {data['lines']} lines from {data['value']}")
-  print(f"Key: {key}\n")
-  print(data['secret'].decode())
+  print(f"Key: {data['candidate'].key.decode()}\n")
+  print(data['candidate'].secret.decode())
