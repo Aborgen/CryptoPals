@@ -104,7 +104,9 @@ def averageDistance(blockList, keySize):
   distances = [hammingDistance(a, b) for a, b in blockPairs]
   return sum(distances) / keySize
 
-# The intent of this function is to create n blocks consisting of every n bytes.
+# The intent of this function is to create n blocks consisting of every n bytes
+# for a total of len(bytes) / n elements.
+#
 # The below diagram demonstrates what the purpose of the mask is.
 # If we had 18 bytes and we wanted 3 blocks comprised of every 3 of them:
 # (Arranged for readability. In reality, the 1s and 0s are Trues and Falses within a flat deque)
@@ -122,6 +124,8 @@ def averageDistance(blockList, keySize):
 #   0 0 1  0 0 1
 #   0 0 1  0 0 1
 #   0 0 1  0 0 1
+#
+# As can be seen above, each block consists of 18 / 3, or 6, elements.
 def divideIntoBlocks(byteObject, blockNumber):
   # Fill with null bytes to ensure each block will have the same length, if necessary
   if len(byteObject) % blockNumber != 0:
