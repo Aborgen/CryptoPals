@@ -7,6 +7,7 @@ from modules.crypto.crypto import fixedXOR
 from modules.utils.compare import hammingDistance, isBytes, isHex
 from modules.utils.convert import hex2bytes
 from modules.utils.file import readJSON
+from modules.utils.modify import repeatPerCharacter
 from typing import NamedTuple
 
 class XORType(Enum):
@@ -97,7 +98,9 @@ def _crackRepeatingXOR(byteObject, scoreFile, keySizeRange, blockNumber):
     keyByte = bytes.fromhex(candidate.key[0:2])
     key.append(keyByte[0])
 
-  return bytes(key)
+  key = bytes(key)
+  secret = fixedXOR(byteObject, repeatPerCharacter(key, len(byteObject)))
+  return Candidate(-1, key, byteObject, secret)
 
 def averageDistance(blockList, keySize):
   blockPairs = combinations(blockList, 2)
