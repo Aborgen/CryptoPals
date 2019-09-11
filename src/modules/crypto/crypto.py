@@ -21,7 +21,13 @@ def fixedXOR(a, b):
   return encrypted
 
 def repeatingXOR(line, key):
-  return fixedXOR(line, key * len(line))
+  if not isBytes(line):
+    line = toBytes(line)
+
+  if not isBytes(key):
+    key = toBytes(key)
+
+  return fixedXOR(line, repeatPerCharacter(key, len(line)))
 
 def ECB_AES128(key, text, action):
   if not isBytes(key):
