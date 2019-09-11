@@ -1,3 +1,5 @@
+# https://cryptopals.com/static/challenge-data/6.txt
+# The contents of this file have been base64 encoded after being encrypted with repeating-key XOR
 HUIfTQsPAh9PE048GmllH0kcDk4TAQsHThsBFkU2AB4BSWQgVB0dQzNTTmVS
 BgBHVBwNRU0HBAxTEjwMHghJGgkRTxRMIRpHKwAFHUdZEQQJAGQmB1MANxYG
 DBoXQR0BUlQwXwAgEwoFR08SSAhFTmU+Fgk4RQYFCBpGB08fWXh+amI2DB0P
