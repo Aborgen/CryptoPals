@@ -58,7 +58,8 @@ def _crackSingleXOR(byteObject, scoreFile):
 def calculateScore(secret, keyList):
   score = 0
   for key, value in keyList.items():
-    score += (secret.count(key) * value)
+    count = secret.count(key)
+    score += (count * value) + count
   
   return round(score, 4)
 
