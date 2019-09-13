@@ -1,7 +1,7 @@
 from Crypto.Cipher import AES
 from enum import Enum
 from . import initCrypto
-from ..utils.collections import normalizeListSize
+from ..utils.collections import normalizeListSize, splitToBlocks
 from ..utils.compare import isBytes
 from ..utils.convert import toBytes
 from ..utils.modify import pad, repeatPerCharacter
@@ -47,3 +47,25 @@ def ECB_AES128(key, text, action):
   else:
     raise ValueError
 
+def CBC_AES128(key, text, IV, action):
+  if not isBytes(key):
+    key = toBytes(key)
+
+  if not isBytes(text):
+    text = toBytes(text)
+
+  blocks = splitToBlocks(text, 16)
+
+  previousBlock = IV
+  total = bytearray(len(text))
+  for block in blocks:
+    useBlock = block
+    if action == Action.DECRYPT:
+      useBlock = ECB_AES128(key, block, action)
+    elif action == Action.ENCRYPT:
+      raise NotImplementedError
+    
+    total.extend(fixedXOR(previousBlock, useBlock))
+    previousBlock = block
+
+  return bytes(total)
