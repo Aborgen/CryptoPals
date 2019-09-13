@@ -4,7 +4,7 @@ from enum import Enum
 from itertools import combinations, compress
 from math import inf as infinity
 from modules.crypto.crypto import fixedXOR
-from modules.utils.compare import hammingDistance, isBytes, isHex
+from modules.utils.compare import encodedByUTF8, hammingDistance, isBytes, isHex
 from modules.utils.convert import hex2bytes
 from modules.utils.file import readJSON
 from modules.utils.modify import repeatPerCharacter
@@ -43,15 +43,8 @@ def _crackSingleXOR(byteObject, scoreFile):
     possibleKey = repeatPerCharacter(bytes([i]), byteLength)
     secret = fixedXOR(byteObject, possibleKey)
     score = calculateScore(secret, frequentLetters)
-    if score > bestCandidate.score:
-      encodedByUTF8 = True
-      try:
-        secret.decode()
-      except:
-        encodedByUTF8 = False
-
-      if encodedByUTF8:
-        bestCandidate = Candidate(score, possibleKey, byteObject, secret)
+    if score > bestCandidate.score and encodedByUTF8(secret):
+      bestCandidate = Candidate(score, possibleKey, byteObject, secret)
 
   return bestCandidate
 
