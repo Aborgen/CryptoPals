@@ -25,17 +25,16 @@ def crackXOR(byteObject, scoreFile, EType):
     byteObject = hex2bytes(byteObject) if isHex(byteObject) else byteObject.encode()
 
   if EType == XORType.SINGLE:
-    return _crackSingleXOR(byteObject, scoreFile)
+    return _crackSingleXOR(byteObject, frequentLetters)
   elif EType == XORType.REPEATING:
-    return _crackRepeatingXOR(byteObject, scoreFile, keySizeRange = (2, 40), blockNumber = 4)
+    return _crackRepeatingXOR(byteObject, frequentLetters, keySizeRange = (2, 40), blockNumber = 4)
   else:
     raise NotImplementedError
 
-def _crackSingleXOR(byteObject, scoreFile):
+def _crackSingleXOR(byteObject, frequentLetters):
   if not isBytes(byteObject):
     raise ValueError("Input must be a bytes object")
 
-  frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
   bestCandidate = Candidate(0, b'', b'', b'')
   # We skip 0, since XORing against a bunch of 0s isn't going to do anything
   byteLength = len(byteObject)
@@ -56,19 +55,17 @@ def calculateScore(secret, keyList):
   
   return round(score, 4)
 
-def _crackRepeatingXOR(byteObject, scoreFile, keySizeRange, blockNumber):
+def _crackRepeatingXOR(byteObject, frequentLetters, keySizeRange, blockNumber):
   if not isBytes(byteObject):
     raise ValueError("Input must be a bytes object")
 
   keySizes = getLikelyKeySizes(byteObject, keySizeRange, blockNumber, howMany = 3)
-  frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
-
   bestGuess = Candidate(0, b'', b'', b'')
   for keySize in keySizes:
     blocks = divideIntoBlocks(byteObject, keySize)
     possibleKey = bytearray()
     for block in blocks:
-      candidate = _crackSingleXOR(block, scoreFile)
+      candidate = _crackSingleXOR(block, frequentLetters)
       # This key length can never be the correct key length
       if candidate.key == b'':
         break
