@@ -31,3 +31,13 @@ def isBytes(b):
 
 def _validateBytes(b):
   return type(b) == bytes
+
+def encodedByUTF8(byteObject):
+  status = True
+  try:
+    byteObject.decode('utf-8')
+  except:
+    status = False
+
+  return status
+
