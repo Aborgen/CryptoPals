@@ -51,5 +51,11 @@
     "value": "YELLOW SUBMARINE",
     "length": 20,
     "expectedOutput": "YELLOW SUBMARINE\u0004\u0004\u0004\u0004"
+  },
+  "challenge10": {
+    "description": "Demonstrate ability to decrypt AES-128 in CBC mode given key",
+    "key": "YELLOW SUBMARINE",
+    "value": "resources/challenge10.txt"
   }
+
 }
