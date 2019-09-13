@@ -60,44 +60,65 @@ def _crackRepeatingXOR(byteObject, scoreFile, keySizeRange, blockNumber):
   if not isBytes(byteObject):
     raise ValueError("Input must be a bytes object")
 
-  rangeStart, rangeEnd = keySizeRange
-  stringLength = len(byteObject)
-  # We need at least two chunks of bytes with rangeEnd length.
-  if rangeEnd > stringLength:
-    rangeEnd = stringLength 
+  keySizes = getLikelyKeySizes(byteObject, keySizeRange, blockNumber, howMany = 3)
+  frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
 
-  bestDistance = infinity
-  bestKeySize = 0
-  for keySize in range(rangeStart, rangeEnd + 1):
-    blockList = []
-    for i in range(blockNumber):
-      sliceStart = keySize * i
-      sliceEnd = keySize * (i + 1)
-      if sliceStart > stringLength - 1 or sliceEnd > stringLength:
+  bestGuess = Candidate(0, b'', b'', b'')
+  for keySize in keySizes:
+    blocks = divideIntoBlocks(byteObject, keySize)
+    possibleKey = bytearray()
+    for block in blocks:
+      candidate = _crackSingleXOR(block, scoreFile)
+      # This key length can never be the correct key length
+      if candidate.key == b'':
         break
 
-      b = byteObject[sliceStart:sliceEnd]
-      blockList.append(b)
-    
-    distance = averageDistance(blockList, keySize)
-    if distance < bestDistance:
-      bestDistance = distance
-      bestKeySize = keySize
+      possibleKey.append(candidate.key[0])
 
-  blocks = divideIntoBlocks(byteObject, bestKeySize)
-  key = bytearray()
-  for block in blocks:
-    candidate = _crackSingleXOR(block, scoreFile)
-    key.append(candidate.key[0])
+    if len(possibleKey) != keySize:
+      continue
 
-  key = bytes(key)
-  secret = fixedXOR(byteObject, repeatPerCharacter(key, len(byteObject)))
-  return Candidate(-1, key, byteObject, secret)
+    possibleKey = bytes(possibleKey)
+    secret = fixedXOR(byteObject, repeatPerCharacter(possibleKey, len(byteObject)))
+    score = calculateScore(secret, frequentLetters)
+    if score > bestGuess.score and encodedByUTF8(secret):
+      bestGuess = Candidate(score, possibleKey, byteObject, secret)
+
+  return bestGuess
 
 def averageDistance(blockList, keySize):
   blockPairs = combinations(blockList, 2)
   distances = [hammingDistance(a, b) for a, b in blockPairs]
   return sum(distances) / keySize
+
+def getLikelyKeySizes(byteObject, keySizeRange, blockNumber, howMany):
+  rangeStart, rangeEnd = keySizeRange
+  stringLength = len(byteObject)
+  # We need at least two chunks of bytes with rangeEnd length.
+  if rangeEnd > stringLength:
+    rangeEnd = stringLength
+
+  keyDistances = [(0, infinity)] * howMany
+  for nextKeySize in range(rangeStart, rangeEnd + 1):
+    blockList = []
+    for i in range(blockNumber):
+      sliceStart = nextKeySize * i
+      sliceEnd = nextKeySize * (i + 1)
+      if sliceStart > stringLength - 1 or sliceEnd > stringLength:
+        break
+
+      b = byteObject[sliceStart:sliceEnd]
+      blockList.append(b)
+
+    nextDistance = averageDistance(blockList, nextKeySize)
+    for idx, (keySize, distance) in enumerate(keyDistances):
+      if nextDistance < distance:
+        keyDistances[idx] = (nextKeySize, nextDistance)
+        break
+
+  return [keySize for keySize, distance in keyDistances]
+
+
 
 # The intent of this function is to create n blocks consisting of every n bytes
 # for a total of len(bytes) / n elements.
