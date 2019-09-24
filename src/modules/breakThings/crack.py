@@ -24,6 +24,7 @@ def crackXOR(byteObject, scoreFile, EType):
   if not isBytes(byteObject):
     byteObject = hex2bytes(byteObject) if isHex(byteObject) else byteObject.encode()
 
+  frequentLetters = {key.encode(): value for key, value in readJSON(scoreFile).items()}
   if EType == XORType.SINGLE:
     return _crackSingleXOR(byteObject, frequentLetters)
   elif EType == XORType.REPEATING:
